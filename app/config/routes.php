@@ -1,6 +1,6 @@
 <?php
 use app\controllers\HelloController;
-
+use app\controllers\frontOffice\ArticleController;
 use flight\Engine;
 use flight\net\Router;
 //use Flight;
@@ -17,5 +17,7 @@ use flight\net\Router;
 	
 $HelloController = new HelloController();
 $router -> get('/hello', [$HelloController, 'testHello']);
+$ArticleController = new ArticleController();
+$router->get('/', [$ArticleController, 'index']);
 
 ?>

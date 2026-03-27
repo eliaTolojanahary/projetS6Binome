@@ -19,10 +19,11 @@ Flight::map('db', function() use ($config) {
     try {
         return new PDO(
             sprintf(
-                "pgsql:host=%s;port=%s;dbname=%s",
+                "mysql:host=%s;port=%s;dbname=%s;charset=%s",
                 $config['database']['host'],
-                $config['database']['port'] ?? 5432,
-                $config['database']['dbname']
+                $config['database']['port'] ?? 3306,
+                $config['database']['dbname'],
+                $config['database']['charset'] ?? 'utf8mb4'
             ),
             $config['database']['user'],
             $config['database']['password'],
