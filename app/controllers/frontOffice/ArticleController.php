@@ -10,6 +10,6 @@ class ArticleController {
         $n = 5;
         $articleModel = new ArticleModel();
         $articles = $articleModel->getLastNArticles($n);
-        Flight::render('articles', ['articles' => $articles]);
+        Flight::render('frontOffice/articles', ['articles' => $articles]);
     }
 }

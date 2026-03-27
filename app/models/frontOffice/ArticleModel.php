@@ -12,7 +12,7 @@ class ArticleModel {
         $this->db = Flight::db();
     }
         public function getLastNArticles($n) {
-                $stmt = $this->db->prepare('SELECT id, titre, image FROM articles ORDER BY date_publication DESC LIMIT :n');
+                $stmt = $this->db->prepare('SELECT id, titre, image_url FROM articles ORDER BY publie_le DESC LIMIT :n');
                 $stmt->bindValue(':n', (int)$n, PDO::PARAM_INT);
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);

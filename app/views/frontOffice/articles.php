@@ -12,7 +12,9 @@
         <?php if (!empty($articles)): ?>
             <?php foreach ($articles as $article): ?>
                 <div class="article">
-                    <img src="/img/<?= htmlspecialchars($article['image']) ?>" alt="Image de l'article" style="max-width:200px;">
+                    <?php if (!empty($article['image_url'])): ?>
+                        <img src="<?= htmlspecialchars($article['image_url']) ?>" alt="Image de l'article" style="max-width:200px;">
+                    <?php endif; ?>
                     <h2><?= htmlspecialchars($article['titre']) ?></h2>
                 </div>
             <?php endforeach; ?>
