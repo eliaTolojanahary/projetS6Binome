@@ -18,6 +18,11 @@ use flight\net\Router;
 $HelloController = new HelloController();
 $router -> get('/hello', [$HelloController, 'testHello']);
 $ArticleController = new ArticleController();
+
+
 $router->get('/', [$ArticleController, 'index']);
+$router->get('/article/@id-@slug', function($id, $slug) use ($ArticleController) {
+	$ArticleController->show($id);
+});
 
 ?>
