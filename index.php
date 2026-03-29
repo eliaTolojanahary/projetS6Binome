@@ -1,11 +1,9 @@
 
 
 <?php
-use controllers\frontOffice\ArticleController;
-require_once __DIR__ . '/controllers/frontOffice/ArticleController.php';
-require_once __DIR__ . '/models/frontOffice/ArticleModel.php';
-$config = require __DIR__ . '/inc/db.php';
+session_start();
 
+$config = require __DIR__ . '/inc/db.php';
 
 try {
     $pdo = new PDO(
@@ -18,9 +16,50 @@ try {
     exit('Erreur connexion base : ' . $e->getMessage());
 }
 
-$controller = new ArticleController($pdo);
 $uri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 if ($uri === '') $uri = '/';
+
+if (strpos($uri, '/admin') === 0) {
+    require_once __DIR__ . '/controllers/backOffice/AuthController.php';
+    require_once __DIR__ . '/models/backOffice/AuthModel.php';
+  
+    if ($uri === '/admin') {
+        if (empty($_SESSION['admin'])) {
+            header('Location: /admin/login');
+            exit;
+        }
+        
+        require __DIR__ . '/views/backOffice/admin.php';
+        exit;
+    }
+   
+    if ($uri === '/admin/login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+        $auth = new \app\controllers\backOffice\AuthController($pdo);
+        $auth->loginForm();
+        exit;
+    }
+  
+    if ($uri === '/admin/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $auth = new \app\controllers\backOffice\AuthController($pdo);
+        $auth->login();
+        exit;
+    }
+    
+    if ($uri === '/admin/logout') {
+        $auth = new \app\controllers\backOffice\AuthController($pdo);
+        $auth->logout();
+        exit;
+    }
+    // 404 back office
+    http_response_code(404);
+    echo '<h1>404 - Page admin non trouvée</h1>';
+    exit;
+}
+
+
+require_once __DIR__ . '/controllers/frontOffice/ArticleController.php';
+require_once __DIR__ . '/models/frontOffice/ArticleModel.php';
+$controller = new \controllers\frontOffice\ArticleController($pdo);
 
 switch (true) {
     case ($uri === '/'):
