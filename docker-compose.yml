@@ -1,13 +1,54 @@
 version: '3.7'
 
 services:
-    flight:
-        image: php:8-alpine
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public
-        environment:
-            docker: "true"
-        ports:
-            - "8080:8080"
-        volumes:
-            - .:/var/www
+  web:
+    image: php:8.2-cli
+    container_name: projetS6-web
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    environment:
+      docker: "true"
+    depends_on:
+      - db
+    command: >
+      bash -c "
+        apt-get update &&
+        apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libzip-dev &&
+        docker-php-ext-configure gd --with-freetype --with-jpeg &&
+        docker-php-ext-install gd zip pdo_mysql &&
+        
+        # Installer Composer si non présent
+        if ! command -v composer > /dev/null; then
+          php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" &&
+          php composer-setup.php &&
+          mv composer.phar /usr/local/bin/composer;
+        fi &&
+
+        # Installer dépendances si vendor absent
+        if [ ! -d vendor ]; then
+          composer install;
+        fi &&
+
+        # Lancer le serveur PHP
+        php -S 0.0.0.0:8000 -t public
+      "
+
+  db:
+    image: mariadb:10.11
+    container_name: projetS6-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: guerreNews
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql/database_guerre_iran.sql:/docker-entrypoint-initdb.d/database_guerre_iran.sql:ro
+
+volumes:
+  db_data:
