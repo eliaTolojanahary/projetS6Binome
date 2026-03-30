@@ -1,5 +1,7 @@
 
+
 <?php
+use controllers\frontOffice\ArticleController;
 require_once __DIR__ . '/controllers/frontOffice/ArticleController.php';
 require_once __DIR__ . '/models/frontOffice/ArticleModel.php';
 $config = require __DIR__ . '/inc/db.php';
@@ -23,15 +25,12 @@ if ($uri === '') $uri = '/';
 switch (true) {
     case ($uri === '/'):
         $controller->index();
-        break;
+        exit;
     case preg_match('#^/article/(\d+)-([a-zA-Z0-9\-]+)$#', $uri, $m):
         $controller->show((int)$m[1]);
-        break;
+        exit;
     default:
         http_response_code(404);
         echo '<h1>404 - Page non trouvée</h1>';
+        exit;
 }
-
-http_response_code(404);
-echo '<h1>404 - Page non trouvée</h1>';
-exit;

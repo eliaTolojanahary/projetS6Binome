@@ -1,7 +1,7 @@
 <?php
-namespace app\controllers\frontOffice;
+namespace controllers\frontOffice;
 
-use app\models\frontOffice\ArticleModel;
+use models\frontOffice\ArticleModel;
 
 class ArticleController {
     private $pdo;

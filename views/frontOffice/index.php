@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Accueil - GuerreNews | Conflit Iran</title>
     <meta name="description" content="Suivez les dernières actualités, analyses et images du conflit en Iran et au Moyen-Orient sur GuerreNews. Articles, dossiers, opinions, et plus.">
-    <link rel="stylesheet" href="/css/frontoffice-home.css">
+    <link rel="stylesheet" href="/assets/css/frontOffice/frontoffice-home.css">
 </head>
 <body>
 <nav class="main-menu">

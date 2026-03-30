@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title><?= !empty($article['titre']) ? htmlspecialchars($article['titre']) . ' | GuerreNews' : 'Détail de l\'article' ?></title>
     <meta name="description" content="<?= !empty($article['chapeau']) ? htmlspecialchars($article['chapeau']) : 'Détail et analyse d\'un article sur GuerreNews.' ?>">
-    <link rel="stylesheet" href="/css/frontoffice-article.css">
+    <link rel="stylesheet" href="/assets/css/frontOffice/frontoffice-article.css">
 </head>
 <body>
 <div class="article-detail">

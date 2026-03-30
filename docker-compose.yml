@@ -2,39 +2,17 @@ version: '3.7'
 
 services:
   web:
-    image: php:8.2-cli
+    build:
+      context: .
+    image: projets6-web
     container_name: projetS6-web
-    working_dir: /var/www
+    working_dir: /var/www/html
     volumes:
-      - .:/var/www
+      - .:/var/www/html
     ports:
-      - "8000:8000"
-    environment:
-      docker: "true"
+      - "8080:80"
     depends_on:
       - db
-    command: >
-      bash -c "
-        apt-get update &&
-        apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libzip-dev &&
-        docker-php-ext-configure gd --with-freetype --with-jpeg &&
-        docker-php-ext-install gd zip pdo_mysql &&
-        
-        # Installer Composer si non présent
-        if ! command -v composer > /dev/null; then
-          php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" &&
-          php composer-setup.php &&
-          mv composer.phar /usr/local/bin/composer;
-        fi &&
-
-        # Installer dépendances si vendor absent
-        if [ ! -d vendor ]; then
-          composer install;
-        fi &&
-
-        # Lancer le serveur PHP
-        php -S 0.0.0.0:8000 -t public
-      "
 
   db:
     image: mariadb:10.11

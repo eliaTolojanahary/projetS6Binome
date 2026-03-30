@@ -2,7 +2,7 @@
 return [
 	'database' => [
 		'driver'   => 'mysql',
-		'host'     => 'localhost',
+		'host'     => 'db',
 		'port'     => '3306',
 		'dbname'   => 'guerreNews',
 		'user'     => 'root',
