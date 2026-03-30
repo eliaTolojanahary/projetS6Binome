@@ -1,5 +1,3 @@
-
-
 <?php
 session_start();
 
@@ -22,32 +20,60 @@ if ($uri === '') $uri = '/';
 if (strpos($uri, '/admin') === 0) {
     require_once __DIR__ . '/controllers/backOffice/AuthController.php';
     require_once __DIR__ . '/models/backOffice/AuthModel.php';
-  
+    require_once __DIR__ . '/controllers/backOffice/AdminArticleController.php';
+
     if ($uri === '/admin') {
         if (empty($_SESSION['admin'])) {
             header('Location: /admin/login');
             exit;
         }
-        
         require __DIR__ . '/views/backOffice/admin.php';
         exit;
     }
-   
     if ($uri === '/admin/login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
         $auth = new \app\controllers\backOffice\AuthController($pdo);
         $auth->loginForm();
         exit;
     }
-  
     if ($uri === '/admin/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $auth = new \app\controllers\backOffice\AuthController($pdo);
         $auth->login();
         exit;
     }
-    
     if ($uri === '/admin/logout') {
         $auth = new \app\controllers\backOffice\AuthController($pdo);
         $auth->logout();
+        exit;
+    }
+
+    // CRUD articles admin (protégé)
+    if (empty($_SESSION['admin'])) {
+        header('Location: /admin/login');
+        exit;
+    }
+    $adminArticle = new AdminArticleController($pdo);
+    if ($uri === '/admin/article/list') {
+        $adminArticle->list();
+        exit;
+    }
+    if ($uri === '/admin/article/create') {
+        $adminArticle->create();
+        exit;
+    }
+    if ($uri === '/admin/article/store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $adminArticle->store();
+        exit;
+    }
+    if (preg_match('#^/admin/article/edit/(\d+)$#', $uri, $m)) {
+        $adminArticle->edit((int)$m[1]);
+        exit;
+    }
+    if (preg_match('#^/admin/article/update/(\d+)$#', $uri, $m) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $adminArticle->update((int)$m[1]);
+        exit;
+    }
+    if (preg_match('#^/admin/article/delete/(\d+)$#', $uri, $m) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $adminArticle->delete((int)$m[1]);
         exit;
     }
     // 404 back office

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/assets/css/frontOffice/frontoffice-article.css">
 </head>
 <body>
-<div class="article-detail">
+<main class="article-detail" role="main">
     <a href="/" class="back-link">&larr; Retour à l'accueil</a>
     <?php if (isset($article) && !empty($article)): ?>
         <h1><?= htmlspecialchars($article['titre']) ?></h1>
@@ -20,7 +20,20 @@
             <?php endif; ?>
         </div>
         <?php if (!empty($article['image_url'])): ?>
-            <img src="<?= (strpos($article['image_url'], 'http') === 0 ? htmlspecialchars($article['image_url']) : '/' . ltrim(htmlspecialchars($article['image_url']), '/')) ?>" alt="<?= htmlspecialchars($article['titre']) ?>">
+            <?php
+                $imgSrc = (strpos($article['image_url'], 'http') === 0 ? htmlspecialchars($article['image_url']) : '/' . ltrim(htmlspecialchars($article['image_url']), '/'));
+                $imgWebp = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imgSrc);
+                $webpPath = $_SERVER['DOCUMENT_ROOT'] . parse_url($imgWebp, PHP_URL_PATH);
+                $showWebp = file_exists($webpPath);
+            ?>
+            <?php if ($showWebp): ?>
+                <picture>
+                    <source srcset="<?= $imgWebp ?>" type="image/webp">
+                    <img src="<?= $imgWebp ?>" alt="<?= htmlspecialchars($article['titre']) ?>" width="569" height="320" style="max-width:100%;height:auto;" fetchpriority="high">
+                </picture>
+            <?php else: ?>
+                <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($article['titre']) ?>" width="569" height="320" style="max-width:100%;height:auto;" fetchpriority="high">
+            <?php endif; ?>
         <?php endif; ?>
         <?php if (!empty($article['chapeau'])): ?>
             <div class="chapeau"><h2><?= htmlspecialchars($article['chapeau']) ?></h2></div>
@@ -31,6 +44,6 @@
     <?php else: ?>
         <p>Article introuvable</p>
     <?php endif; ?>
-</div>
+</main>
 </body>
 </html>

@@ -23,7 +23,7 @@
         </form>
     </div>
 </nav>
-<div class="main-news">
+<main class="main-news" role="main">
     <h1>Guerre en Iran : nouvelles et analyses</h1>
     <p class="subtitle">Suivez les dernières actualités, analyses et images du conflit au Moyen-Orient</p>
     <section class="news-feed" id="newsFeed">
@@ -31,7 +31,7 @@
             <?php foreach ($articles as $article): ?>
                 <article class="news-article" data-title="<?= htmlspecialchars(strtolower($article['titre'])) ?>" data-chapeau="<?= !empty($article['chapeau']) ? htmlspecialchars(strtolower($article['chapeau'])) : '' ?>">
                     <?php if (!empty($article['image_url'])): ?>
-                        <img class="news-img" src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['titre']) ?>">
+                        <img class="news-img" src="<?= htmlspecialchars($article['image_url']) ?>" alt="<?= htmlspecialchars($article['titre']) ?>" fetchpriority="high">
                     <?php endif; ?>
                     <div class="news-content">
                         <span class="news-time">
@@ -54,7 +54,7 @@
             <p>Aucun article trouvé</p>
         <?php endif; ?>
     </section>
-</div>
+</main>
 <script>
 
 const searchInput = document.getElementById('searchInput');
